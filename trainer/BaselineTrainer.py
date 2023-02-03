@@ -77,8 +77,8 @@ class BaselineTrainer():
             end_positions = batch['end_positions'].to(self.device)
 
             # seq_len 길이만큼 boundary를 설정하여 seq_len 밖으로 벗어날 경우 벗어난 값을 최소값인 0(cls 토큰)으로 설정해줌
-            start_positions.clamp(0, start_logits.size(1))
-            end_positions.clamp(0, end_logits.size(1))
+            start_positions = start_positions.clamp(0, start_logits.size(1))
+            end_positions = end_positions.clamp(0, end_logits.size(1))
 
             # 각 start, end의 loss 평균
             loss = (self.criterion(start_logits, start_positions) + self.criterion(end_logits, end_positions)) / 2
@@ -122,8 +122,8 @@ class BaselineTrainer():
                 end_positions = valid_batch['end_positions'].to(self.device)
 
                 # seq_len 길이만큼 boundary를 설정하여 seq_len 밖으로 벗어날 경우 벗어난 값을 최소값인 0(cls 토큰)으로 설정해줌
-                start_positions.clamp(0, start_logits.size(1))
-                end_positions.clamp(0, end_logits.size(1))
+                start_positions = start_positions.clamp(0, start_logits.size(1))
+                end_positions = end_positions.clamp(0, end_logits.size(1))
 
                 loss = (self.criterion(start_logits, start_positions) + self.criterion(end_logits, end_positions)) / 2
                 val_loss += loss.detach().cpu().numpy().item()
